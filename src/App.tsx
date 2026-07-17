@@ -7,9 +7,7 @@ function App() {
         <header className="mb-6">
           <h1 className="text-3xl font-bold text-gray-900">Einkaufsliste</h1>
 
-          <p className="mt-2 text-sm text-gray-500">
-            Organisiere deine Einkäufe einfach und übersichtlich.
-          </p>
+          <p className="mt-2 text-sm text-gray-500">Produkt eingeben....</p>
         </header>
 
         <div className="border-t border-gray-200 pt-6">
