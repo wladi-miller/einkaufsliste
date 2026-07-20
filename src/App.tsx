@@ -1,4 +1,6 @@
 import "./App.css";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 function App() {
   return (
@@ -6,26 +8,12 @@ function App() {
       <h1 className="mb-10 mt-16 text-3xl font-semibold">Einkaufsliste</h1>
 
       <div className="flex w-full gap-2">
-        <input
-          type="text"
-          placeholder="Produkt eingeben..."
-          className="h-10 flex-1 rounded-md border border-gray-200 bg-white px-3 text-sm outline-none placeholder:text-gray-500 focus:border-gray-400"
-        />
+        <Input placeholder="Produkt eingeben..." className="flex-1" />
 
-        <input
-          type="number"
-          defaultValue={1}
-          min={1}
-          className="h-10 w-14 rounded-md border border-gray-200 bg-white px-3 text-sm outline-none focus:border-gray-400"
-        />
+        <Input type="number" defaultValue={1} className="w-16" />
       </div>
 
-      <button
-        type="button"
-        className="mt-2 h-11 w-full rounded-md bg-gray-900 px-8 text-sm font-medium text-white transition-colors hover:bg-gray-800"
-      >
-        Eintrag Hinzufügen
-      </button>
+      <Button className="mt-2 w-full">Eintrag hinzufügen</Button>
 
       <div className="mt-6 flex w-full flex-col gap-2">
         <article className="flex items-center justify-between rounded-xl border border-gray-200 bg-white p-6 shadow">
