@@ -1,4 +1,3 @@
-import "./App.css";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -23,12 +22,7 @@ function App() {
             <p className="text-sm text-gray-500">Anzahl: 1</p>
           </div>
 
-          <button
-            type="button"
-            className="h-11 rounded-md border border-gray-200 bg-white px-6 text-sm font-medium transition-colors hover:bg-gray-100"
-          >
-            Abhaken
-          </button>
+          <Button variant="outline">Abhaken</Button>
         </article>
       </div>
     </main>
