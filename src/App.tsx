@@ -1,13 +1,32 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import ShoppingItem from "./components/ShoppingItem";
+
+type ShoppingItem = {
+  id: number;
+  name: string;
+  amount: number;
+  checked: boolean;
+};
 
 function App() {
-  const [shoppingItems, setShoppingItems] = useState<
-    { id: number; name: string; amount: number; checked: boolean }[]
-  >([]);
+  const [shoppingItems, setShoppingItems] = useState<ShoppingItem[]>(() => {
+    const savedItems = localStorage.getItem("shoppingItems");
+
+    if (savedItems === null) {
+      return [];
+    }
+
+    return JSON.parse(savedItems);
+  });
+
   const [productName, setProductName] = useState("");
   const [productAmount, setProductAmount] = useState(1);
+
+  useEffect(() => {
+    localStorage.setItem("shoppingItems", JSON.stringify(shoppingItems));
+  }, [shoppingItems]);
 
   function addProduct() {
     if (productName.trim() === "" || productAmount <= 0) {
@@ -20,16 +39,22 @@ function App() {
       checked: false,
     };
 
-    setShoppingItems([...shoppingItems, newProduct]);
+    setShoppingItems((currentItems) => [...currentItems, newProduct]);
     setProductName("");
     setProductAmount(1);
   }
 
   function toggleChecked(id: number) {
-    setShoppingItems(
-      shoppingItems.map((item) =>
+    setShoppingItems((currentItems) =>
+      currentItems.map((item) =>
         item.id === id ? { ...item, checked: !item.checked } : item,
       ),
+    );
+  }
+
+  function deleteProduct(id: number) {
+    setShoppingItems((currentItems) =>
+      currentItems.filter((item) => item.id !== id),
     );
   }
 
@@ -60,26 +85,12 @@ function App() {
 
       <div className="mt-6 flex w-full flex-col gap-2">
         {shoppingItems.map((item) => (
-          <article
+          <ShoppingItem
             key={item.id}
-            className="flex items-center justify-between rounded-xl border border-gray-200 bg-white p-6 shadow"
-          >
-            <div>
-              <h2
-                className={`text-lg font-semibold ${
-                  item.checked ? "text-gray-400 line-through" : ""
-                }`}
-              >
-                {item.name}
-              </h2>
-
-              <p className="text-sm text-gray-500">Anzahl: {item.amount}</p>
-            </div>
-
-            <Button variant="outline" onClick={() => toggleChecked(item.id)}>
-              {item.checked ? "Rückgängig" : "Abhaken"}
-            </Button>
-          </article>
+            item={item}
+            onToggle={toggleChecked}
+            onDelete={deleteProduct}
+          />
         ))}
       </div>
     </main>
