@@ -1,12 +1,8 @@
 import { Button } from "@/components/ui/button";
+import type { ShoppingItemData } from "../types/shopping-item";
 
 type ShoppingItemProps = {
-  item: {
-    id: number;
-    name: string;
-    amount: number;
-    checked: boolean;
-  };
+  item: ShoppingItemData;
   onToggle: (id: number) => void;
   onDelete: (id: number) => void;
 };
