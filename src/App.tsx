@@ -21,6 +21,9 @@ function App() {
     localStorage.setItem("shoppingItems", JSON.stringify(shoppingItems));
   }, [shoppingItems]);
 
+  const totalItems = shoppingItems.length;
+  const completedItems = shoppingItems.filter((item) => item.checked).length;
+
   function addProduct() {
     if (productName.trim() === "" || productAmount <= 0) {
       return;
@@ -54,6 +57,9 @@ function App() {
   return (
     <main className="mx-auto flex w-full max-w-lg flex-col items-center justify-center px-4">
       <h1 className="mb-10 mt-16 text-3xl font-semibold">Einkaufsliste</h1>
+      <p className="mb-10 text-sm text-gray-500">
+        {completedItems} von {totalItems} Produkten erledigt
+      </p>
 
       <ShoppingForm
         productName={productName}

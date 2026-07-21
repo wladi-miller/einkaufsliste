@@ -17,7 +17,13 @@ function ShoppingForm({
   onAdd,
 }: ShoppingFormProps) {
   return (
-    <>
+    <form
+      className="w-full"
+      onSubmit={(event) => {
+        event.preventDefault();
+        onAdd();
+      }}
+    >
       <div className="flex w-full gap-2">
         <Input
           placeholder="Produkt eingeben..."
@@ -35,10 +41,10 @@ function ShoppingForm({
         />
       </div>
 
-      <Button className="mt-2 w-full" onClick={onAdd}>
-        Eintrag hinzufügen
+      <Button type="submit" className="mt-2 w-full">
+        Hinzufügen
       </Button>
-    </>
+    </form>
   );
 }
 
