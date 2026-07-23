@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useRef } from "react";
 
 type ShoppingFormProps = {
   productName: string;
@@ -16,6 +17,8 @@ function ShoppingForm({
   onAmountChange,
   onAdd,
 }: ShoppingFormProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
   return (
     <form
       className="w-full"
@@ -26,23 +29,31 @@ function ShoppingForm({
     >
       <div className="flex w-full gap-2">
         <Input
+          ref={inputRef}
+          type="text"
           placeholder="Produkt eingeben..."
-          className="flex-1"
           value={productName}
           onChange={(event) => onNameChange(event.target.value)}
+          className="flex-1"
         />
 
         <Input
           type="number"
-          min={1}
           value={productAmount}
           onChange={(event) => onAmountChange(Number(event.target.value))}
-          className="w-16"
+          className="w-14"
         />
       </div>
 
-      <Button type="submit" className="mt-2 w-full">
-        Hinzufügen
+      <Button
+        type="submit"
+        variant="default"
+        size="lg"
+        className="mt-2 w-full"
+        disabled={productName.trim().length < 1}
+        style={{ cursor: "pointer" }}
+      >
+        Eintrag Hinzufügen
       </Button>
     </form>
   );

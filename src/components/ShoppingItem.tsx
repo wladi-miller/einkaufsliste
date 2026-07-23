@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import type { ShoppingItemData } from "../types/shopping-item";
+import { CheckCircledIcon, ResetIcon, TrashIcon } from "@radix-ui/react-icons";
 
 type ShoppingItemProps = {
   item: ShoppingItemData;
@@ -9,21 +10,51 @@ type ShoppingItemProps = {
 
 function ShoppingItem({ item, onToggle, onDelete }: ShoppingItemProps) {
   return (
-    <article className="flex items-center justify-between rounded-xl border border-gray-200 bg-white p-6 shadow">
-      <div className={item.checked ? "text-gray-400 line-through" : ""}>
-        <h2 className="text-lg font-semibold">{item.name}</h2>
+    <article className="flex items-center justify-between rounded-xl border bg-card p-6 text-card-foreground shadow">
+      <div>
+        <h3
+          className={`text-lg font-semibold${
+            item.checked ? " text-muted-foreground line-through" : ""
+          }`}
+        >
+          {item.name}
+        </h3>
 
-        <p className="text-sm text-gray-500">Anzahl: {item.amount}</p>
+        <p className="text-sm text-muted-foreground">Anzahl: {item.amount}</p>
       </div>
 
       <div className="flex gap-2">
-        <Button variant="outline" onClick={() => onToggle(item.id)}>
-          {item.checked ? "Rückgängig" : "Abhaken"}
-        </Button>
+        {item.checked ? (
+          <>
+            <Button
+              variant="destructive"
+              size="icon"
+              onClick={() => onDelete(item.id)}
+              className="enabled:cursor-pointer"
+            >
+              <TrashIcon className="h-4 w-4" />
+            </Button>
 
-        <Button variant="destructive" onClick={() => onDelete(item.id)}>
-          Löschen
-        </Button>
+            <Button
+              variant="secondary"
+              onClick={() => onToggle(item.id)}
+              style={{ cursor: "pointer" }}
+            >
+              <ResetIcon />
+              Zurück
+            </Button>
+          </>
+        ) : (
+          <Button
+            variant="outline"
+            size="lg"
+            onClick={() => onToggle(item.id)}
+            style={{ cursor: "pointer" }}
+          >
+            <CheckCircledIcon />
+            Abhaken
+          </Button>
+        )}
       </div>
     </article>
   );

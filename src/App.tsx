@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ShoppingItem from "./components/ShoppingItem";
 import type { ShoppingItemData } from "./types/shopping-item";
 import ShoppingForm from "./components/ShoppingForm";
+import { toast } from "sonner";
 
 function App() {
   const [shoppingItems, setShoppingItems] = useState<ShoppingItemData[]>(() => {
@@ -21,24 +22,41 @@ function App() {
     localStorage.setItem("shoppingItems", JSON.stringify(shoppingItems));
   }, [shoppingItems]);
 
-  const totalItems = shoppingItems.length;
-  const completedItems = shoppingItems.filter((item) => item.checked).length;
-
   function addProduct() {
     if (productName.trim() === "" || productAmount <= 0) {
       return;
     }
+    const productAlreadyExists = shoppingItems.some(
+      (item) => item.name === productName.trim(),
+    );
+
+    if (productAlreadyExists) {
+      toast.error(`Dieses Produkt ${productName.trim()} existiert bereits.`);
+      return;
+    }
+
     const newProduct: ShoppingItemData = {
       id: Date.now(),
       name: productName.trim(),
       amount: productAmount,
       checked: false,
     };
+    toast.success(`Das Produkt ${productName.trim()} wurde hinzugefügt.`);
 
-    setShoppingItems((currentItems) => [...currentItems, newProduct]);
+    setShoppingItems((currentItems) => [newProduct, ...currentItems]);
     setProductName("");
     setProductAmount(1);
   }
+
+  const sortedItems = [...shoppingItems];
+
+  sortedItems.sort((a, b) => {
+    if (a.checked === b.checked) {
+      return 0;
+    }
+
+    return a.checked ? 1 : -1;
+  });
 
   function toggleChecked(id: number) {
     setShoppingItems((currentItems) =>
@@ -49,6 +67,12 @@ function App() {
   }
 
   function deleteProduct(id: number) {
+    const deletedItem = shoppingItems.find((item) => item.id === id);
+
+    if (deletedItem) {
+      toast.info(`Das Produkt ${deletedItem.name} wurde gelöscht.`);
+    }
+
     setShoppingItems((currentItems) =>
       currentItems.filter((item) => item.id !== id),
     );
@@ -57,9 +81,6 @@ function App() {
   return (
     <main className="mx-auto flex w-full max-w-lg flex-col items-center justify-center px-4">
       <h1 className="mb-10 mt-16 text-3xl font-semibold">Einkaufsliste</h1>
-      <p className="mb-10 text-sm text-gray-500">
-        {completedItems} von {totalItems} Produkten erledigt
-      </p>
 
       <ShoppingForm
         productName={productName}
@@ -70,7 +91,7 @@ function App() {
       />
 
       <div className="mt-6 flex w-full flex-col gap-2">
-        {shoppingItems.map((item) => (
+        {sortedItems.map((item) => (
           <ShoppingItem
             key={item.id}
             item={item}
